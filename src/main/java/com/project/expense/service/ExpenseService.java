@@ -7,19 +7,20 @@ import com.project.expense.dto.CreateExpenseRequest;
 import com.project.expense.entity.Expense;
 import com.project.expense.repository.ExpenseRepository;
 import com.project.expense.repository.UserRepository;
+// import com.project.expense.service.ExpenseCategoryRepository;
 
 @Service
 public class ExpenseService {
 
     private final ExpenseRepository expenseRepository;
     private final UserRepository userRepository;
-    private final ExpenseCategoryRepository expenseCategoryRepository;
+    // private final ExpenseCategoryRepository expenseCategoryRepository;
 
     @Autowired
     public ExpenseService(ExpenseRepository expenseRepository, UserRepository userRepository, ExpenseCategoryRepository expenseCategoryRepository) {
         this.expenseRepository = expenseRepository;
         this.userRepository = userRepository;
-        this.expenseCategoryRepository = expenseCategoryRepository;
+        // this.expenseCategoryRepository = expenseCategoryRepository;
     }
 
     public Expense createExpense(CreateExpenseRequest createExpenseRequest) {
