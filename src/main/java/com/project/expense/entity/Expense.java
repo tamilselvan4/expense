@@ -113,8 +113,8 @@ public class Expense {
         return state;
     }
 
-    public void setState(StateCategory state) {
-        this.state = state;
+    public void setState(StateCategory s) {
+        this.state = s;
     }
 
     public User getAdministratorPerson() {

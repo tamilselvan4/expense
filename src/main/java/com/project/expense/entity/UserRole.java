@@ -8,6 +8,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "user_roles")
 public class UserRole {
+    
     @Id
     @Column(name = "role_id")
     private Long roleId;

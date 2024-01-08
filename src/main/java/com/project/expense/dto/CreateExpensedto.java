@@ -3,7 +3,7 @@ package com.project.expense.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class CreateExpenseRequest {
+public class CreateExpensedto {
 
     private Long userId;
     private Long categoryId;
@@ -11,6 +11,9 @@ public class CreateExpenseRequest {
     private LocalDate date;
     private String description;
     private byte[] file;
+    private Long stateId;
+    private Long administratorPerson;
+    private String rejectedReason;
     
     public Long getUserId() {
         return userId;
@@ -48,7 +51,27 @@ public class CreateExpenseRequest {
     public void setFile(byte[] file) {
         this.file = file;
     }
+    public Long getStateId() {
+        return stateId;
+    }
+    public void setStateId(Long stateId) {
+        this.stateId = stateId;
+    }
+    
+    public Long getAdministratorPerson() {
+        return administratorPerson;
+    }
+    public void setAdministratorPerson(Long administratorPerson) {
+        this.administratorPerson = administratorPerson;
+    }
+    public String getRejectedReason() {
+        return rejectedReason;
+    }
+    public void setRejectedReason(String rejectedReason) {
+        this.rejectedReason = rejectedReason;
+    }
 
+    
     
 }
 

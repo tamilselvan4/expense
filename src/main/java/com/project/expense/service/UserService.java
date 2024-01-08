@@ -3,8 +3,10 @@ package com.project.expense.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.project.expense.dto.CreateUserRequest;
+import com.project.expense.dto.CreateUserDto;
 import com.project.expense.entity.User;
+import com.project.expense.repository.CompanyRepository;
+import com.project.expense.repository.RoleRepository;
 import com.project.expense.repository.UserRepository;
 
 @Service
@@ -12,35 +14,74 @@ public class UserService {
 
     @Autowired
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final CompanyRepository companyRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, CompanyRepository companyRepository) {
         this.userRepository = userRepository;
+        this.roleRepository= roleRepository;
+        this.companyRepository= companyRepository;
     }
 
-    public User createUser(CreateUserRequest createUserRequest) {
-        User newUser = convertToUserEntity(createUserRequest);
-        return userRepository.save(newUser);
+    public User createUser(CreateUserDto createUser) {
+        User u = new User();
+        // u.setUserId(createUser.getUserId());
+        u.setUserName(createUser.getUserName());
+        u.setEmail(createUser.getEmail());
+        u.setPassword(createUser.getPassword());
+        u.setCompany(companyRepository.findById(createUser.getCompanyId()).orElseThrow());
+        u.setUserRole(roleRepository.findById(createUser.getUserRole()).orElseThrow());
+
+        return userRepository.save(u);
     }
 
-    private User convertToUserEntity(CreateUserRequest createUserRequest) {
-        User user = new User();
-        user.setUserName(createUserRequest.getUserName());
-        user.setEmail(createUserRequest.getEmail());
-        user.setPassword(createUserRequest.getPassword());
-        user.setCompany(createUserRequest.getCompanyId());
-        return user;
+    public boolean isUserExists(String string) {
+        return userRepository.existsByEmail(string);
+    }
+    
+
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId).orElse(null);
     }
 
-    public String validateUser(User user) {
-        String email = user.getEmail();
-        if(email==null) {
-            return "false";
+    public User updateUser(Long userId, CreateUserDto updatedUser) {
+        User existingUser = userRepository.findById(userId).orElse(null);
+        if(existingUser != null) {
+            existingUser.setUserName(updatedUser.getUserName());
+            existingUser.setEmail(updatedUser.getEmail());
+            existingUser.setPassword(updatedUser.getPassword());
+            // existingUser.setCompany(updatedUser.getCompanyId());
+            // existingUser.setUserRole(updatedUser.getUserRole());
+
+            return userRepository.save(existingUser);
         }
         else {
-            User u = userRepository.findByEmail(email);
-
+            return null;
         }
-        return "false";
+    }
+
+    public boolean login(String email, String password) {
+        User user = userRepository.findByEmail(email);
+        if(user !=null && verifyPassword(password, user.getPassword())) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean verifyPassword(String inputPassword, String password) {
+        return inputPassword.equals(password);
+    }
+
+    public boolean deleteUser(Long userId) {
+        User user = userRepository.findById(userId).orElse(null);
+
+        if (user != null) {
+            userRepository.delete(user);
+            return true;
+        } 
+        else {
+            return false;
+        }
     }
 }
 

@@ -1,15 +1,15 @@
 package com.project.expense.dto;
 
-import com.project.expense.entity.Company;
+public class CreateUserDto {
 
-public class CreateUserRequest {
-
+    public Long UserId;
     private String userName;
     private String email;
     private String password;
-    private int userRole;
-    private Company companyId;
+    private Long userRole;
+    private Long companyId;
 
+    
     public String getUserName() {
         return userName;
     }
@@ -28,17 +28,23 @@ public class CreateUserRequest {
     public void setPassword(String password) {
         this.password = password;
     }
-    public int getUserRole() {
+    public Long getUserRole() {
         return userRole;
     }
-    public void setUserRole(int userRole) {
+    public void setUserRole(Long userRole) {
         this.userRole = userRole;
     }
-    public Company getCompanyId() {
+    public Long getCompanyId() {
         return companyId;
     }
-    public void setCompanyId(Company companyId) {
+    public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+    public Long getUserId() {
+        return UserId;
+    }
+    public void setUserId(Long userId) {
+        UserId = userId;
     }
     
 }
