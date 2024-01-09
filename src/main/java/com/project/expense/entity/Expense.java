@@ -133,6 +133,9 @@ public class Expense {
         this.rejectedReason = rejectedReason;
     }
 
+    public enum ExpenseStatus {
+        CREATED, REQUESTED, ACCEPTED, REJECTED
+    }
 }
 
 

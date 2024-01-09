@@ -17,11 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class ExpenseController {
 
     @Autowired
-    private final ExpenseService expenseService;
-
-    public ExpenseController(ExpenseService expenseService) {
-        this.expenseService = expenseService;
-    }
+    private ExpenseService expenseService;
 
     @PostMapping
     public ResponseEntity<Expense> createExpense(@RequestBody CreateExpensedto createExpense) {
@@ -29,17 +25,26 @@ public class ExpenseController {
         return new ResponseEntity<>(createdExpense, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<Expense>> getAllExpensesForUser(@PathVariable Long userId) {
-        List<Expense> userExpenses = expenseService.getAllExpensesForUser(userId);
+    @GetMapping("/{expenseId}")
+    public ResponseEntity<Expense> getExpenseById(@PathVariable Long expenseId) {
+        Expense expense = expenseService.getExpenseById(expenseId);
 
-        if (!userExpenses.isEmpty()) {
-            return new ResponseEntity<>(userExpenses, HttpStatus.OK);
-        } 
-        else {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if (expense != null) {
+            return new ResponseEntity<>(expense, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    
+
+    @GetMapping
+    public ResponseEntity<List<Expense>> getAllExpenses() {
+        List<Expense> expenses = expenseService.getAllExpenses();
+        if (!expenses.isEmpty()) {
+            return new ResponseEntity<>(expenses, HttpStatus.OK);
+        } else {
+            return null;
+        }
+    }
+
 }
 

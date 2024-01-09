@@ -12,11 +12,7 @@ import org.springframework.stereotype.Service;
 public class CategoryService {
 
     @Autowired
-    private final CategoryRepository categoryRepository;
-
-    public CategoryService(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-    }
+    private CategoryRepository categoryRepository;
 
     public List<ExpenseCategory> getAllCategories() {
         return categoryRepository.findAll();

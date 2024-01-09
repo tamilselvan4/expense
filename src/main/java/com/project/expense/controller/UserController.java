@@ -1,5 +1,7 @@
 package com.project.expense.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.expense.dto.CreateUserDto;
+import com.project.expense.entity.Expense;
 import com.project.expense.entity.User;
+import com.project.expense.service.ExpenseService;
 import com.project.expense.service.UserService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,9 +30,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    @Autowired
+    private ExpenseService expenseService;
 
     @PostMapping("/newuser")
     public ResponseEntity<?> createUser(@RequestBody CreateUserDto createUser) {
@@ -65,7 +68,7 @@ public class UserController {
     }
     
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String email, @RequestParam String password) {
+    public ResponseEntity<String> login(@RequestParam("email") String email, @RequestParam String password) {
         boolean valid = userService.login(email, password);
         if(valid) {
             return new ResponseEntity<>("Login successful", HttpStatus.OK);
@@ -87,5 +90,16 @@ public class UserController {
         }
     }
     
+    @GetMapping("/{userId}/expense")
+    public ResponseEntity<List<Expense>> getAllExpensesForUser(@PathVariable Long userId) {
+        List<Expense> userExpenses = expenseService.getAllExpensesForUser(userId);
+
+        if (!userExpenses.isEmpty()) {
+            return new ResponseEntity<>(userExpenses, HttpStatus.OK);
+        } 
+        else {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
 }
 

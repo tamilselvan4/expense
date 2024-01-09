@@ -7,9 +7,8 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ExpenseRepository extends JpaRepository<User, Long> {
+public interface ExpenseRepository extends JpaRepository<Expense, Long> {
 
-    List<Expense> findAllByUserId(Long userId);
+    List<Expense> findAllByUser(User user);
 
-    Expense save(Expense expense);
 }

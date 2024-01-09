@@ -13,19 +13,16 @@ import com.project.expense.repository.UserRepository;
 public class UserService {
 
     @Autowired
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-    private final CompanyRepository companyRepository;
+    private UserRepository userRepository;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, CompanyRepository companyRepository) {
-        this.userRepository = userRepository;
-        this.roleRepository= roleRepository;
-        this.companyRepository= companyRepository;
-    }
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private CompanyRepository companyRepository;
 
     public User createUser(CreateUserDto createUser) {
         User u = new User();
-        // u.setUserId(createUser.getUserId());
         u.setUserName(createUser.getUserName());
         u.setEmail(createUser.getEmail());
         u.setPassword(createUser.getPassword());
@@ -39,7 +36,6 @@ public class UserService {
         return userRepository.existsByEmail(string);
     }
     
-
     public User getUserById(Long userId) {
         return userRepository.findById(userId).orElse(null);
     }
@@ -83,5 +79,11 @@ public class UserService {
             return false;
         }
     }
+
+    // public ArrayList<Expense> getExpenseByUserId(Long userId) {
+    //     User user = userRepository.findById(userId).orElse(null);
+    //     ArrayList<Expense> expenses = user.getExpenses();
+    //     return expenses;
+    // }
 }
 

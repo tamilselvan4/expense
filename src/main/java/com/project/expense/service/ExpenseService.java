@@ -1,6 +1,7 @@
 package com.project.expense.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,22 +18,21 @@ import com.project.expense.repository.UserRepository;
 public class ExpenseService {
 
     @Autowired
-    private final ExpenseRepository expenseRepository;
-    private final UserRepository userRepository;
-    private final CategoryRepository CategoryRepository;
-    private final StateRepository stateRepository;
+    private ExpenseRepository expenseRepository;
 
-    public ExpenseService(ExpenseRepository expenseRepository, UserRepository userRepository, CategoryRepository CategoryRepository, StateRepository stateRepository) {
-        this.expenseRepository = expenseRepository;
-        this.userRepository = userRepository;
-        this.CategoryRepository = CategoryRepository;
-        this.stateRepository = stateRepository;
-    }
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private StateRepository stateRepository;
 
     public Expense createExpense(CreateExpensedto createExpense) {
         Expense expense = new Expense();
         expense.setUser(userRepository.findById(createExpense.getUserId()).orElseThrow());
-        expense.setCategory(CategoryRepository.findById(createExpense.getCategoryId()).orElseThrow());
+        expense.setCategory(categoryRepository.findById(createExpense.getCategoryId()).orElseThrow());
         expense.setAmount(createExpense.getAmount());
         expense.setDate(createExpense.getDate());
         expense.setDescription(createExpense.getDescription());
@@ -41,20 +41,23 @@ public class ExpenseService {
         return expenseRepository.save(expense);
     }
 
-    public List<Expense> getAllExpensesForUser(Long userId) {
-        return expenseRepository.findAllByUserId(userId);
+    public Expense getExpenseById(Long expenseId) {
+        return expenseRepository.findById(expenseId).orElse(null);
     }
 
-    // public List<Expense> getAllExpensesByUserId(Long userId) {
-    //     User user = userRepository.findById(userId).orElse(null);
+    public List<Expense> getAllExpenses() {
+        return expenseRepository.findAll();
+    }
 
-    //     if (user != null) {
-    //         return user.getExpenses();
-    //     } else {
-    //         return null;
-    //     }
-    // }
-    
+    public List<Expense> getAllExpensesForUser(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+
+        if(user.isPresent()){
+            return expenseRepository.findAllByUser(user.get());
+        }
+
+        return null;
+    }
     
 }
 
