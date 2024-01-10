@@ -2,6 +2,8 @@ package com.project.expense.controller;
 
 import com.project.expense.dto.CreateExpensedto;
 import com.project.expense.entity.Expense;
+import com.project.expense.repository.ExpenseHistoryRepository;
+import com.project.expense.service.ExpenseHistoryService;
 import com.project.expense.service.ExpenseService;
 
 import java.util.List;
@@ -19,9 +21,13 @@ public class ExpenseController {
     @Autowired
     private ExpenseService expenseService;
 
+    @Autowired
+    private ExpenseHistoryService expenseHistoryService;
+
     @PostMapping
     public ResponseEntity<Expense> createExpense(@RequestBody CreateExpensedto createExpense) {
         Expense createdExpense = expenseService.createExpense(createExpense);
+        // expenseHistoryService.createExpense(createExpense);
         return new ResponseEntity<>(createdExpense, HttpStatus.CREATED);
     }
 

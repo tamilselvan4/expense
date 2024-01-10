@@ -1,5 +1,6 @@
 package com.project.expense.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,5 +102,23 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
+
+    @GetMapping("/{userId}/expense/{state_id}")
+    public ResponseEntity<List<Expense>> getExpenseByStateId(@PathVariable Long userId, @PathVariable Long state_id) {
+
+        List<Expense> userExpensesById = expenseService.getAllExpensesForUser(userId);
+        List<Expense> userExpensesByState = expenseService.getAllExpensesByState(state_id);
+
+        List<Expense> commonExpenses = new ArrayList<>(userExpensesById);
+        commonExpenses.retainAll(userExpensesByState);
+
+        if(!commonExpenses.isEmpty()){
+            return new ResponseEntity<>(commonExpenses, HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+    
 }
 

@@ -2,7 +2,7 @@ package com.project.expense.dto;
 
 public class CreateUserDto {
 
-    public Long UserId;
+    private Long userId;
     private String userName;
     private String email;
     private String password;
@@ -41,10 +41,10 @@ public class CreateUserDto {
         this.companyId = companyId;
     }
     public Long getUserId() {
-        return UserId;
+        return userId;
     }
     public void setUserId(Long userId) {
-        UserId = userId;
+        this.userId = userId;
     }
     
 }
