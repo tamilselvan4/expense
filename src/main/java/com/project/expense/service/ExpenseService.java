@@ -58,6 +58,16 @@ public class ExpenseService {
 
         return null;
     }
+
+    public boolean deleteExpense(Long expenseId) {
+        Expense expense = expenseRepository.findById(expenseId).orElse(null);
+
+        if(expense != null) {
+            expenseRepository.delete(expense);
+            return true;
+        }
+        return false;
+    }
     
 }
 

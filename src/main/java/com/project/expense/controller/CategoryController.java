@@ -29,9 +29,8 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addCategory(@RequestParam Long categoryId, @RequestParam String categoryName) {
+    public ResponseEntity<String> addCategory(@RequestParam String categoryName) {
         ExpenseCategory newCategory = new ExpenseCategory();
-        newCategory.setCategoryId(categoryId);
         newCategory.setCategoryName(categoryName);
 
         categoryService.addCategory(newCategory);
@@ -50,4 +49,3 @@ public class CategoryController {
         }
     }
 }
-

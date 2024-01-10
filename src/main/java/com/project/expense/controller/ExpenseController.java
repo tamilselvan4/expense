@@ -36,9 +36,23 @@ public class ExpenseController {
         }
     }
 
+    @DeleteMapping("/{expenseId}")
+    public ResponseEntity<String> deleteExpense(@PathVariable Long expenseId) {
+        boolean deleted = expenseService.deleteExpense(expenseId);
+
+        if(deleted) {
+            return new ResponseEntity<>("Expense deleted Successfully", HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>("Expense not found or unable to delete", HttpStatus.NOT_FOUND);
+        }
+
+    }
+
     @GetMapping
     public ResponseEntity<List<Expense>> getAllExpenses() {
         List<Expense> expenses = expenseService.getAllExpenses();
+        
         if (!expenses.isEmpty()) {
             return new ResponseEntity<>(expenses, HttpStatus.OK);
         } else {

@@ -18,20 +18,20 @@ public class User {
     private Long userId;
 
     @ManyToOne
-    @JoinColumn(name = "company_id")
+    @JoinColumn(name = "company_id", nullable = false)
     private Company company;
 
-    @Column(name = "user_name")
+    @Column(name = "user_name", nullable = false)
     private String userName;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
     @ManyToOne
-    @JoinColumn(name = "user_role")
+    @JoinColumn(name = "user_role", nullable = false)
     private UserRole userRole;
 
     public Long getUserId() {

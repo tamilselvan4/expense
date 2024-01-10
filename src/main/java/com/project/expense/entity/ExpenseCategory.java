@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 @Table(name = "expense_categories")
 public class ExpenseCategory {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "category_id")
     private Long categoryId;
 

@@ -46,14 +46,18 @@ public class UserService {
             existingUser.setUserName(updatedUser.getUserName());
             existingUser.setEmail(updatedUser.getEmail());
             existingUser.setPassword(updatedUser.getPassword());
-            // existingUser.setCompany(updatedUser.getCompanyId());
-            // existingUser.setUserRole(updatedUser.getUserRole());
+            existingUser.setCompany(companyRepository.findById(updatedUser.getCompanyId()).orElseThrow());
+            existingUser.setUserRole(roleRepository.findById(updatedUser.getUserRole()).orElseThrow());
 
             return userRepository.save(existingUser);
         }
         else {
             return null;
         }
+    }
+
+    public boolean existsUser(Long userId) {
+        return userRepository.existsById(userId);
     }
 
     public boolean login(String email, String password) {
@@ -79,11 +83,5 @@ public class UserService {
             return false;
         }
     }
-
-    // public ArrayList<Expense> getExpenseByUserId(Long userId) {
-    //     User user = userRepository.findById(userId).orElse(null);
-    //     ArrayList<Expense> expenses = user.getExpenses();
-    //     return expenses;
-    // }
 }
 
