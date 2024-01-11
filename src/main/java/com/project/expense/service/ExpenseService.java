@@ -8,12 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.project.expense.dto.CreateExpensedto;
 import com.project.expense.entity.Expense;
-import com.project.expense.entity.ExpenseCategory;
-import com.project.expense.entity.ExpenseHistory;
 import com.project.expense.entity.StateCategory;
 import com.project.expense.entity.User;
 import com.project.expense.repository.CategoryRepository;
-import com.project.expense.repository.ExpenseHistoryRepository;
 import com.project.expense.repository.ExpenseRepository;
 import com.project.expense.repository.StateRepository;
 import com.project.expense.repository.UserRepository;
@@ -33,9 +30,6 @@ public class ExpenseService {
     @Autowired
     private StateRepository stateRepository;
 
-    @Autowired
-    private ExpenseHistoryRepository expenseHistoryRepository;
-
     public Expense createExpense(CreateExpensedto createExpense) {
         Expense expense = new Expense();
         expense.setUser(userRepository.findById(createExpense.getUserId()).orElseThrow());
@@ -44,16 +38,6 @@ public class ExpenseService {
         expense.setDate(createExpense.getDate());
         expense.setDescription(createExpense.getDescription());
         expense.setState(stateRepository.findById(createExpense.getStateId()).orElseThrow());
-
-        // Expense createdExpense = expenseRepository.save(expense);
-
-        // ExpenseHistory expenseHistory = new ExpenseHistory();
-        // expenseHistory.setExpenseId(createdExpense.getExpenseId());
-        // expenseHistory.setExpense(createdExpense);
-        // expenseHistory.setEmployee(userRepository.findById(createExpense.getUserId()).orElseThrow());
-        // expenseHistory.setState(stateRepository.findById(createExpense.getStateId()).orElseThrow());
-
-        // expenseHistoryRepository.save(expenseHistory);
 
         return expenseRepository.save(expense);
     }

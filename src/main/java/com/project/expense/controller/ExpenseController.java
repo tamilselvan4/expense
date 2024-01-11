@@ -2,7 +2,6 @@ package com.project.expense.controller;
 
 import com.project.expense.dto.CreateExpensedto;
 import com.project.expense.entity.Expense;
-import com.project.expense.repository.ExpenseHistoryRepository;
 import com.project.expense.service.CategoryService;
 import com.project.expense.service.ExpenseHistoryService;
 import com.project.expense.service.ExpenseService;
@@ -32,12 +31,12 @@ public class ExpenseController {
     @PostMapping
     public ResponseEntity<Expense> createExpense(@RequestBody CreateExpensedto createExpense) {
         Expense createdExpense = expenseService.createExpense(createExpense);
-        // expenseHistoryService.createExpense(createExpense);
+        expenseHistoryService.createExpenseHistory(createdExpense);
         return new ResponseEntity<>(createdExpense, HttpStatus.CREATED);
     }
 
     @GetMapping("/{expenseId}")
-    public ResponseEntity<Expense> getExpenseById(@PathVariable Long expenseId) {
+    public ResponseEntity<Expense> getExpenseById(@PathVariable("expenseId") Long expenseId) {
         Expense expense = expenseService.getExpenseById(expenseId);
 
         if (expense != null) {
@@ -48,7 +47,7 @@ public class ExpenseController {
     }
 
     @DeleteMapping("/{expenseId}")
-    public ResponseEntity<String> deleteExpense(@PathVariable Long expenseId) {
+    public ResponseEntity<String> deleteExpense(@PathVariable("expenseId") Long expenseId) {
         boolean deleted = expenseService.deleteExpense(expenseId);
 
         if(deleted) {

@@ -46,7 +46,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<User> getUser(@PathVariable Long userId) {
+    public ResponseEntity<User> getUser(@PathVariable("userId") Long userId) {
         User user = userService.getUserById(userId);
 
         if (user != null) {
@@ -57,7 +57,7 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody CreateUserDto updatedUser) {
+    public ResponseEntity<?> updateUser(@PathVariable("userId") Long userId, @RequestBody CreateUserDto updatedUser) {
         User updateUser = userService.updateUser(userId, updatedUser);
 
         if(userService.existsUser(userId)){
@@ -80,7 +80,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
+    public ResponseEntity<String> deleteUser(@PathVariable("userId") Long userId) {
         boolean deleted = userService.deleteUser(userId);
 
         if (deleted) {
@@ -92,7 +92,7 @@ public class UserController {
     }
     
     @GetMapping("/{userId}/expense")
-    public ResponseEntity<List<Expense>> getAllExpensesForUser(@PathVariable Long userId) {
+    public ResponseEntity<List<Expense>> getAllExpensesForUser(@PathVariable("userId") Long userId) {
         List<Expense> userExpenses = expenseService.getAllExpensesForUser(userId);
 
         if (!userExpenses.isEmpty()) {
