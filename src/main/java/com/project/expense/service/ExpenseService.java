@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.project.expense.dto.CreateExpensedto;
 import com.project.expense.entity.Expense;
+import com.project.expense.entity.ExpenseHistory;
 import com.project.expense.entity.StateCategory;
 import com.project.expense.entity.User;
 import com.project.expense.repository.CategoryRepository;
+import com.project.expense.repository.ExpenseHistoryRepository;
 import com.project.expense.repository.ExpenseRepository;
 import com.project.expense.repository.StateRepository;
 import com.project.expense.repository.UserRepository;
@@ -29,6 +31,9 @@ public class ExpenseService {
 
     @Autowired
     private StateRepository stateRepository;
+
+    @Autowired
+    private ExpenseHistoryRepository expenseHistoryRepository;
 
     public Expense createExpense(CreateExpensedto createExpense) {
         Expense expense = new Expense();
@@ -79,6 +84,10 @@ public class ExpenseService {
         }
 
         return null;
+    }
+
+    public List<ExpenseHistory> getAllExpenseHistory() {
+        return expenseHistoryRepository.findAll();
     }
     
 }
