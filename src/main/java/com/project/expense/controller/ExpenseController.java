@@ -3,6 +3,7 @@ package com.project.expense.controller;
 import com.project.expense.dto.CreateExpensedto;
 import com.project.expense.entity.Expense;
 import com.project.expense.repository.ExpenseHistoryRepository;
+import com.project.expense.service.CategoryService;
 import com.project.expense.service.ExpenseHistoryService;
 import com.project.expense.service.ExpenseService;
 
@@ -12,7 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/expense")
@@ -20,6 +22,9 @@ public class ExpenseController {
 
     @Autowired
     private ExpenseService expenseService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @Autowired
     private ExpenseHistoryService expenseHistoryService;
@@ -66,5 +71,16 @@ public class ExpenseController {
         }
     }
 
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<List<Expense>> getExpenseByState(@PathVariable("categoryId") Long categoryId) {
+        List<Expense> expenses = categoryService.getAllExpensesForCategory(categoryId); 
+        
+        if (!expenses.isEmpty()) {
+            return new ResponseEntity<>(expenses, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    
 }
 

@@ -1,6 +1,6 @@
 
 CREATE TABLE Company (
-    company_id INT AUTO_INCREMENT PRIMARY KEY,
+    company_id INT PRIMARY KEY,
     company_name VARCHAR(50)
 );
 
@@ -66,7 +66,7 @@ CREATE TABLE Expenses (
 );
 
 CREATE TABLE expense_history (
-    expense_id INT,
+    expense_id INT AUTO_INCREMENT PRIMARY KEY,
     employee_id INT,
     administrator_id INT,
     state_id INT,

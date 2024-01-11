@@ -103,11 +103,13 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{userId}/expense/{state_id}")
-    public ResponseEntity<List<Expense>> getExpenseByStateId(@PathVariable Long userId, @PathVariable Long state_id) {
+    @GetMapping("/{userId}/expense/{stateId}")
+    public ResponseEntity<List<Expense>> getExpenseByStateId(
+        @PathVariable("userId") Long userId, 
+        @PathVariable("stateId") Long stateId) {
 
         List<Expense> userExpensesById = expenseService.getAllExpensesForUser(userId);
-        List<Expense> userExpensesByState = expenseService.getAllExpensesByState(state_id);
+        List<Expense> userExpensesByState = expenseService.getAllExpensesByState(stateId);
 
         List<Expense> commonExpenses = new ArrayList<>(userExpensesById);
         commonExpenses.retainAll(userExpensesByState);

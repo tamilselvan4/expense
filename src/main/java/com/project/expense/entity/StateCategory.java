@@ -8,6 +8,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "state_categories")
 public class StateCategory {
+    
     @Id
     @Column(name = "state_id")
     private Long stateId;

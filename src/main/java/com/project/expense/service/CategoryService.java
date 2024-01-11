@@ -1,9 +1,12 @@
 package com.project.expense.service;
 
+import com.project.expense.entity.Expense;
 import com.project.expense.entity.ExpenseCategory;
 import com.project.expense.repository.CategoryRepository;
+import com.project.expense.repository.ExpenseRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,9 @@ public class CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private ExpenseRepository expenseRepository;
 
     public List<ExpenseCategory> getAllCategories() {
         return categoryRepository.findAll();
@@ -29,6 +35,17 @@ public class CategoryService {
         } else {
             return false;
         }
+    }
+
+    public List<Expense> getAllExpensesForCategory(Long categoryId) {
+
+        Optional<ExpenseCategory> expenseByCategoryId = categoryRepository.findById(categoryId);
+
+        if (expenseByCategoryId.isPresent()) {
+            return expenseRepository.findAllByCategory(expenseByCategoryId.get());
+        }
+
+        return null;
     }
 
 }
