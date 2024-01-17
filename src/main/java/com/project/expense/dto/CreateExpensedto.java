@@ -11,7 +11,7 @@ public class CreateExpensedto {
     private LocalDate date;
     private String description;
     private byte[] file;
-    private Long stateId;
+    private Long statusId;
     private Long administratorPerson;
     private String rejectedReason;
     
@@ -51,11 +51,11 @@ public class CreateExpensedto {
     public void setFile(byte[] file) {
         this.file = file;
     }
-    public Long getStateId() {
-        return stateId;
+    public Long getStatusId() {
+        return statusId;
     }
-    public void setStateId(Long stateId) {
-        this.stateId = stateId;
+    public void setStatusId(Long statusId) {
+        this.statusId = statusId;
     }
     
     public Long getAdministratorPerson() {

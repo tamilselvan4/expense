@@ -69,7 +69,7 @@ public class UserController {
     }
     
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam("email") String email, @RequestParam String password) {
+    public ResponseEntity<String> login(@RequestParam("email") String email, @RequestParam("password") String password) {
         boolean valid = userService.login(email, password);
         if(valid) {
             return new ResponseEntity<>("Login successful", HttpStatus.OK);
@@ -103,16 +103,16 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{userId}/expense/{stateId}")
-    public ResponseEntity<List<Expense>> getExpenseByStateId(
+    @GetMapping("/{userId}/expense/{statusId}")
+    public ResponseEntity<List<Expense>> getExpenseByStatusId(
         @PathVariable("userId") Long userId, 
-        @PathVariable("stateId") Long stateId) {
+        @PathVariable("statusId") Long statusId) {
 
         List<Expense> userExpensesById = expenseService.getAllExpensesForUser(userId);
-        List<Expense> userExpensesByState = expenseService.getAllExpensesByState(stateId);
+        List<Expense> userExpensesByStatus = expenseService.getAllExpensesByStatus(statusId);
 
         List<Expense> commonExpenses = new ArrayList<>(userExpensesById);
-        commonExpenses.retainAll(userExpensesByState);
+        commonExpenses.retainAll(userExpensesByStatus);
 
         if(!commonExpenses.isEmpty()){
             return new ResponseEntity<>(commonExpenses, HttpStatus.OK);

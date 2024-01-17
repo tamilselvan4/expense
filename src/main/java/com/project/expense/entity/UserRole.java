@@ -6,21 +6,21 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "user_roles")
+@Table(name = "user_role")
 public class UserRole {
     
     @Id
     @Column(name = "role_id")
-    private Long roleId;
+    private int roleId;
 
-    @Column(name = "role_name")
+    @Column(name = "role_name", unique = true, nullable = false)
     private String roleName;
 
-    public Long getRoleId() {
+    public int getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(Long roleId) {
+    public void setRoleId(int roleId) {
         this.roleId = roleId;
     }
 
@@ -32,6 +32,5 @@ public class UserRole {
         this.roleName = roleName;
     }
 
-    
 }
 

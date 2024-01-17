@@ -8,7 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "expense_categories")
+@Table(name = "expense_category")
 public class ExpenseCategory {
     
     @Id
@@ -16,7 +16,7 @@ public class ExpenseCategory {
     @Column(name = "category_id")
     private Long categoryId;
 
-    @Column(name = "category_name", unique = true)
+    @Column(name = "category_name", unique = true, nullable = false)
     private String categoryName;
 
     public Long getCategoryId() {

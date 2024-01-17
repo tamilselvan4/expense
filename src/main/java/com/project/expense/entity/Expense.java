@@ -9,12 +9,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Expenses")
+@Table(name = "expense")
 public class Expense {
     
     @Id
@@ -23,33 +22,31 @@ public class Expense {
     private Long expenseId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     private ExpenseCategory category;
 
-    @Column(name = "amount")
+    @Column(name = "expense_amount", nullable = false)
     private BigDecimal amount;
 
-    @Column(name = "date")
+    @Column(name = "expense_date", nullable = false)
     private LocalDate date;
+    
+    @ManyToOne
+    @JoinColumn(name = "status_id")
+    private StatusCategory status;
 
-    @Column(name = "description")
+    @Column(name = "invoice_no")
+    private int invoiceNo;
+
+    @Column(name = "expense_description")
     private String description;
 
-    @Lob
-    @Column(name = "file")
+    @Column(name = "expense_file")
     private byte[] file;
-
-    @ManyToOne
-    @JoinColumn(name = "state_id")
-    private StateCategory state;
-
-    @ManyToOne
-    @JoinColumn(name = "administrator_person_id")
-    private User administratorPerson;
 
     @Column(name = "rejected_reason")
     private String rejectedReason;
@@ -110,20 +107,12 @@ public class Expense {
         this.file = file;
     }
 
-    public StateCategory getState() {
-        return state;
+    public StatusCategory getStatus() {
+        return status;
     }
 
-    public void setState(StateCategory s) {
-        this.state = s;
-    }
-
-    public User getAdministratorPerson() {
-        return administratorPerson;
-    }
-
-    public void setAdministratorPerson(User administratorPerson) {
-        this.administratorPerson = administratorPerson;
+    public void setStatus(StatusCategory s) {
+        this.status = s;
     }
 
     public String getRejectedReason() {
@@ -134,9 +123,14 @@ public class Expense {
         this.rejectedReason = rejectedReason;
     }
 
-    public enum ExpenseStatus {
-        CREATED, REQUESTED, ACCEPTED, REJECTED
+    public int getInvoiceNo() {
+        return invoiceNo;
     }
+
+    public void setInvoiceNo(int invoiceNo) {
+        this.invoiceNo = invoiceNo;
+    }
+
 }
 
 

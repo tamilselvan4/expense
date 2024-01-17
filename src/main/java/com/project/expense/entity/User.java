@@ -10,7 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Users")
+@Table(name = "users")
 public class User {
     
     @Id
@@ -25,15 +25,21 @@ public class User {
     @Column(name = "user_name", nullable = false)
     private String userName;
 
-    @Column(name = "email", unique = true, nullable = false)
+    @Column(name = "user_email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "user_password", nullable = false)
     private String password;
 
     @ManyToOne
     @JoinColumn(name = "user_role", nullable = false)
     private UserRole userRole;
+
+    @Column(name = "is_active")
+    private Boolean isActive;
+
+    @JoinColumn(name = "admin_id")
+    private Long adminId;
 
     public Long getUserId() {
         return userId;
@@ -81,6 +87,22 @@ public class User {
 
     public void setUserRole(UserRole userRole) {
         this.userRole = userRole;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public Long getAdminId() {
+        return adminId;
+    }
+
+    public void setAdminId(Long adminId) {
+        this.adminId = adminId;
     }
     
 }

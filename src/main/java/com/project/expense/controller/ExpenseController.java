@@ -2,9 +2,7 @@ package com.project.expense.controller;
 
 import com.project.expense.dto.CreateExpensedto;
 import com.project.expense.entity.Expense;
-import com.project.expense.entity.ExpenseHistory;
 import com.project.expense.service.CategoryService;
-import com.project.expense.service.ExpenseHistoryService;
 import com.project.expense.service.ExpenseService;
 
 import java.util.List;
@@ -28,13 +26,9 @@ public class ExpenseController {
     @Autowired
     private CategoryService categoryService;
 
-    @Autowired
-    private ExpenseHistoryService expenseHistoryService;
-
     @PostMapping
     public ResponseEntity<Expense> createExpense(@RequestBody CreateExpensedto createExpense) {
         Expense createdExpense = expenseService.createExpense(createExpense);
-        expenseHistoryService.createExpenseHistory(createdExpense);
         return new ResponseEntity<>(createdExpense, HttpStatus.CREATED);
     }
 
@@ -74,7 +68,7 @@ public class ExpenseController {
     }
 
     @GetMapping("/category/{categoryId}")
-    public ResponseEntity<List<Expense>> getExpenseByState(@PathVariable("categoryId") Long categoryId) {
+    public ResponseEntity<List<Expense>> getExpenseByStatus(@PathVariable("categoryId") Long categoryId) {
         List<Expense> expenses = categoryService.getAllExpensesForCategory(categoryId); 
         
         if (!expenses.isEmpty()) {
@@ -82,12 +76,6 @@ public class ExpenseController {
         }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @GetMapping("/history")
-    public ResponseEntity<List<ExpenseHistory>> getExpenseHistory() {
-        List<ExpenseHistory> expenseHistory = expenseService.getAllExpenseHistory();
-        return new ResponseEntity<>(expenseHistory, HttpStatus.OK);
     }
     
     

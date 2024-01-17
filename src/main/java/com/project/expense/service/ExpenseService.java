@@ -8,13 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.project.expense.dto.CreateExpensedto;
 import com.project.expense.entity.Expense;
-import com.project.expense.entity.ExpenseHistory;
-import com.project.expense.entity.StateCategory;
+import com.project.expense.entity.StatusCategory;
 import com.project.expense.entity.User;
 import com.project.expense.repository.CategoryRepository;
-import com.project.expense.repository.ExpenseHistoryRepository;
 import com.project.expense.repository.ExpenseRepository;
-import com.project.expense.repository.StateRepository;
+import com.project.expense.repository.StatusRepository;
 import com.project.expense.repository.UserRepository;
 
 @Service
@@ -30,10 +28,7 @@ public class ExpenseService {
     private CategoryRepository categoryRepository;
 
     @Autowired
-    private StateRepository stateRepository;
-
-    @Autowired
-    private ExpenseHistoryRepository expenseHistoryRepository;
+    private StatusRepository statusRepository;
 
     public Expense createExpense(CreateExpensedto createExpense) {
         Expense expense = new Expense();
@@ -42,7 +37,7 @@ public class ExpenseService {
         expense.setAmount(createExpense.getAmount());
         expense.setDate(createExpense.getDate());
         expense.setDescription(createExpense.getDescription());
-        expense.setState(stateRepository.findById(createExpense.getStateId()).orElseThrow());
+        expense.setStatus(statusRepository.findById(createExpense.getStatusId()).orElseThrow());
 
         return expenseRepository.save(expense);
     }
@@ -75,19 +70,15 @@ public class ExpenseService {
         return false;
     }
 
-    public List<Expense> getAllExpensesByState(Long state_id) {
+    public List<Expense> getAllExpensesByStatus(Long status_id) {
 
-        Optional<StateCategory> expensesByStateId = stateRepository.findById(state_id);
+        Optional<StatusCategory> expensesByStatusId = statusRepository.findById(status_id);
 
-        if (expensesByStateId.isPresent()) {
-            return expenseRepository.findAllByState(expensesByStateId.get());
+        if (expensesByStatusId.isPresent()) {
+            return expenseRepository.findAllByStatus(expensesByStatusId.get());
         }
 
         return null;
-    }
-
-    public List<ExpenseHistory> getAllExpenseHistory() {
-        return expenseHistoryRepository.findAll();
     }
     
 }

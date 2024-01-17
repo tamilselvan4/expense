@@ -8,22 +8,22 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Company")
+@Table(name = "company")
 public class Company {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "company_id")
-    private Long companyId;
+    private int companyId;
 
-    @Column(name = "company_name")
+    @Column(name = "company_name", unique = true, nullable = false)
     private String companyName;
 
-    public Long getCompanyId() {
+    public int getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(Long companyId) {
+    public void setCompanyId(int companyId) {
         this.companyId = companyId;
     }
 

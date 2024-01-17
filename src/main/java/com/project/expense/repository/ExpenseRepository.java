@@ -2,7 +2,7 @@ package com.project.expense.repository;
 
 import com.project.expense.entity.Expense;
 import com.project.expense.entity.ExpenseCategory;
-import com.project.expense.entity.StateCategory;
+import com.project.expense.entity.StatusCategory;
 import com.project.expense.entity.User;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
 
     List<Expense> findAllByUser(User user);
 
-    List<Expense> findAllByState(StateCategory stateCategory);
+    List<Expense> findAllByStatus(StatusCategory statusCategory);
 
     List<Expense> findAllByCategory(ExpenseCategory expenseCategory);
 
