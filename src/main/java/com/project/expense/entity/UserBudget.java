@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -19,19 +20,21 @@ public class UserBudget {
     @Column(name = "budget_id")
     private long budgetId;
 
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "budget_user_id", nullable = false)
     private User userId;
 
-    @JoinColumn(name = "category_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "budget_category_id", nullable = false)
     private ExpenseCategory categoryId;
 
-    @Column(name = "start_date")
+    @Column(name = "budget_start_date")
     private Date startDate;
 
-    @Column(name = "end_date")
+    @Column(name = "budget_end_date")
     private Date endDate;
 
-    @Column(name = "amount", nullable = false)
+    @Column(name = "budget_amount", nullable = false)
     private float amount;
 
     public long getBudgetId() {
