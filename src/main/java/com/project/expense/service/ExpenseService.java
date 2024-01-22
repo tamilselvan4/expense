@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.project.expense.dto.CreateExpensedto;
 import com.project.expense.entity.Expense;
-import com.project.expense.entity.StatusCategory;
+import com.project.expense.entity.ExpenseStatus;
 import com.project.expense.entity.User;
 import com.project.expense.repository.CategoryRepository;
 import com.project.expense.repository.ExpenseRepository;
@@ -72,7 +72,7 @@ public class ExpenseService {
 
     public List<Expense> getAllExpensesByStatus(Long status_id) {
 
-        Optional<StatusCategory> expensesByStatusId = statusRepository.findById(status_id);
+        Optional<ExpenseStatus> expensesByStatusId = statusRepository.findById(status_id);
 
         if (expensesByStatusId.isPresent()) {
             return expenseRepository.findAllByStatus(expensesByStatusId.get());

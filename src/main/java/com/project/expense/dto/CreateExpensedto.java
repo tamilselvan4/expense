@@ -1,18 +1,17 @@
 package com.project.expense.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.sql.Date;
 
 public class CreateExpensedto {
 
     private Long userId;
     private Long categoryId;
     private BigDecimal amount;
-    private LocalDate date;
+    private Date date;
     private String description;
     private byte[] file;
     private Long statusId;
-    private Long administratorPerson;
     private String rejectedReason;
     
     public Long getUserId() {
@@ -33,10 +32,10 @@ public class CreateExpensedto {
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
-    public LocalDate getDate() {
+    public Date getDate() {
         return date;
     }
-    public void setDate(LocalDate date) {
+    public void setDate(Date date) {
         this.date = date;
     }
     public String getDescription() {
@@ -57,13 +56,6 @@ public class CreateExpensedto {
     public void setStatusId(Long statusId) {
         this.statusId = statusId;
     }
-    
-    public Long getAdministratorPerson() {
-        return administratorPerson;
-    }
-    public void setAdministratorPerson(Long administratorPerson) {
-        this.administratorPerson = administratorPerson;
-    }
     public String getRejectedReason() {
         return rejectedReason;
     }
@@ -71,7 +63,5 @@ public class CreateExpensedto {
         this.rejectedReason = rejectedReason;
     }
 
-    
-    
 }
 

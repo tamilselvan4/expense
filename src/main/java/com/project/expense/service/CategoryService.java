@@ -21,7 +21,7 @@ public class CategoryService {
     private ExpenseRepository expenseRepository;
 
     public List<ExpenseCategory> getAllCategories() {
-        return categoryRepository.findAll();
+       return categoryRepository.findAll();
     }
 
     public void addCategory(ExpenseCategory category) {

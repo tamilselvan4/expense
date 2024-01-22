@@ -6,8 +6,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "status_category")
-public class StatusCategory {
+@Table(name = "expense_status")
+public class ExpenseStatus {
     
     @Id
     @Column(name = "status_id")

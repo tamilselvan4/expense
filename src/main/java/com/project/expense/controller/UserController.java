@@ -20,7 +20,6 @@ import com.project.expense.entity.User;
 import com.project.expense.service.ExpenseService;
 import com.project.expense.service.UserService;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
 
@@ -78,22 +77,18 @@ public class UserController {
             return new ResponseEntity<>("Invalid credentials", HttpStatus.UNAUTHORIZED);
         }
     }
-
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable("userId") Long userId) {
-        boolean deleted = userService.deleteUser(userId);
-
-        if (deleted) {
-            return new ResponseEntity<>("User deleted successfully", HttpStatus.OK);
-        } 
-        else {
-            return new ResponseEntity<>("User not found or unable to delete", HttpStatus.NOT_FOUND);
-        }
-    }
     
     @GetMapping("/{userId}/expense")
-    public ResponseEntity<List<Expense>> getAllExpensesForUser(@PathVariable("userId") Long userId) {
+    public ResponseEntity<List<Expense>> getAllExpensesForUser(@PathVariable("userId") Long userId, @RequestParam(required = false) Long statusId) {
         List<Expense> userExpenses = expenseService.getAllExpensesForUser(userId);
+        List<Expense> userExpensesByStatus = expenseService.getAllExpensesByStatus(statusId);
+
+        List<Expense> commonExpenses = new ArrayList<>(userExpenses);
+        commonExpenses.retainAll(userExpensesByStatus);
+
+        if (statusId != null) {
+            return new ResponseEntity<>(commonExpenses, HttpStatus.OK);
+        }
 
         if (!userExpenses.isEmpty()) {
             return new ResponseEntity<>(userExpenses, HttpStatus.OK);
@@ -103,24 +98,6 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{userId}/expense/{statusId}")
-    public ResponseEntity<List<Expense>> getExpenseByStatusId(
-        @PathVariable("userId") Long userId, 
-        @PathVariable("statusId") Long statusId) {
-
-        List<Expense> userExpensesById = expenseService.getAllExpensesForUser(userId);
-        List<Expense> userExpensesByStatus = expenseService.getAllExpensesByStatus(statusId);
-
-        List<Expense> commonExpenses = new ArrayList<>(userExpensesById);
-        commonExpenses.retainAll(userExpensesByStatus);
-
-        if(!commonExpenses.isEmpty()){
-            return new ResponseEntity<>(commonExpenses, HttpStatus.OK);
-        }
-        else {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-    }
     
 }
 

@@ -14,16 +14,16 @@ public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "company_id")
-    private int companyId;
+    private Long companyId;
 
     @Column(name = "company_name", unique = true, nullable = false)
     private String companyName;
 
-    public int getCompanyId() {
+    public Long getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(int companyId) {
+    public void setCompanyId(Long companyId) {
         this.companyId = companyId;
     }
 

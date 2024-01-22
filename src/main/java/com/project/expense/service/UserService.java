@@ -28,6 +28,8 @@ public class UserService {
         u.setPassword(createUser.getPassword());
         u.setCompany(companyRepository.findById(createUser.getCompanyId()).orElseThrow());
         u.setUserRole(roleRepository.findById(createUser.getUserRole()).orElseThrow());
+        u.setIsActive(createUser.getIsActive());
+        u.setAdminId(userRepository.findById(createUser.getAdminId()).orElseThrow());
 
         return userRepository.save(u);
     }
@@ -72,16 +74,5 @@ public class UserService {
         return inputPassword.equals(password);
     }
 
-    public boolean deleteUser(Long userId) {
-        User user = userRepository.findById(userId).orElse(null);
-
-        if (user != null) {
-            userRepository.delete(user);
-            return true;
-        } 
-        else {
-            return false;
-        }
-    }
 }
 

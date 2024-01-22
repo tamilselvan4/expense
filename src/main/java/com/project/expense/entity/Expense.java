@@ -1,7 +1,7 @@
 package com.project.expense.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.sql.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,24 +22,24 @@ public class Expense {
     private Long expenseId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "expense_user_id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "expense_category_id")
     private ExpenseCategory category;
 
     @Column(name = "expense_amount", nullable = false)
     private BigDecimal amount;
 
     @Column(name = "expense_date", nullable = false)
-    private LocalDate date;
+    private Date date;
     
     @ManyToOne
-    @JoinColumn(name = "status_id")
-    private StatusCategory status;
+    @JoinColumn(name = "expense_status_id")
+    private ExpenseStatus status;
 
-    @Column(name = "invoice_no")
+    @Column(name = "invoice_no", nullable = true)
     private int invoiceNo;
 
     @Column(name = "expense_description")
@@ -83,11 +83,11 @@ public class Expense {
         this.amount = amount;
     }
 
-    public LocalDate getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -107,11 +107,11 @@ public class Expense {
         this.file = file;
     }
 
-    public StatusCategory getStatus() {
+    public ExpenseStatus getStatus() {
         return status;
     }
 
-    public void setStatus(StatusCategory s) {
+    public void setStatus(ExpenseStatus s) {
         this.status = s;
     }
 

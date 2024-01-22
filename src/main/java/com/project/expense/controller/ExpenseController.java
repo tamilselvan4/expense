@@ -5,6 +5,7 @@ import com.project.expense.entity.Expense;
 import com.project.expense.service.CategoryService;
 import com.project.expense.service.ExpenseService;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,52 +33,31 @@ public class ExpenseController {
         return new ResponseEntity<>(createdExpense, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{expenseId}")
-    public ResponseEntity<Expense> getExpenseById(@PathVariable("expenseId") Long expenseId) {
-        Expense expense = expenseService.getExpenseById(expenseId);
-
-        if (expense != null) {
-            return new ResponseEntity<>(expense, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @DeleteMapping("/{expenseId}")
-    public ResponseEntity<String> deleteExpense(@PathVariable("expenseId") Long expenseId) {
-        boolean deleted = expenseService.deleteExpense(expenseId);
-
-        if(deleted) {
-            return new ResponseEntity<>("Expense deleted Successfully", HttpStatus.OK);
-        }
-        else {
-            return new ResponseEntity<>("Expense not found or unable to delete", HttpStatus.NOT_FOUND);
-        }
-
-    }
-
     @GetMapping
-    public ResponseEntity<List<Expense>> getAllExpenses() {
+    public ResponseEntity<?> getExpenses(@RequestParam(required = false) Long expenseId, @RequestParam(required = false) Long categoryId) {
         List<Expense> expenses = expenseService.getAllExpenses();
-        
+
+        if(expenseId != null) {
+            Expense expense = expenseService.getExpenseById(expenseId);
+            if (expense != null) {
+                return new ResponseEntity<>(Collections.singletonList(expense), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
+
+        if (categoryId != null) {
+            expenses = categoryService.getAllExpensesForCategory(categoryId);
+        } else {
+            expenses = expenseService.getAllExpenses();
+        }
+
         if (!expenses.isEmpty()) {
             return new ResponseEntity<>(expenses, HttpStatus.OK);
         } else {
-            return null;
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-    }
-
-    @GetMapping("/category/{categoryId}")
-    public ResponseEntity<List<Expense>> getExpenseByStatus(@PathVariable("categoryId") Long categoryId) {
-        List<Expense> expenses = categoryService.getAllExpensesForCategory(categoryId); 
-        
-        if (!expenses.isEmpty()) {
-            return new ResponseEntity<>(expenses, HttpStatus.OK);
-        }
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-    
+    }   
     
 }
 

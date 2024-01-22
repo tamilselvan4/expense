@@ -8,7 +8,8 @@ public class CreateUserDto {
     private String password;
     private Long userRole;
     private Long companyId;
-
+    private Boolean isActive;
+    private Long adminId;
     
     public String getUserName() {
         return userName;
@@ -45,6 +46,18 @@ public class CreateUserDto {
     }
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+    public Boolean getIsActive() {
+        return isActive;
+    }
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+    public Long getAdminId() {
+        return adminId;
+    }
+    public void setAdminId(Long adminId) {
+        this.adminId = adminId;
     }
     
 }

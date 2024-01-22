@@ -11,16 +11,16 @@ public class UserRole {
     
     @Id
     @Column(name = "role_id")
-    private int roleId;
+    private Long roleId;
 
     @Column(name = "role_name", unique = true, nullable = false)
     private String roleName;
 
-    public int getRoleId() {
+    public Long getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(int roleId) {
+    public void setRoleId(Long roleId) {
         this.roleId = roleId;
     }
 

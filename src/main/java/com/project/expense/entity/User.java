@@ -19,7 +19,7 @@ public class User {
     private Long userId;
 
     @ManyToOne
-    @JoinColumn(name = "company_id", nullable = false)
+    @JoinColumn(name = "user_company_id", nullable = false)
     private Company company;
 
     @Column(name = "user_name", nullable = false)
@@ -38,8 +38,9 @@ public class User {
     @Column(name = "is_active")
     private Boolean isActive;
 
-    @JoinColumn(name = "admin_id")
-    private Long adminId;
+    @ManyToOne
+    @JoinColumn(name = "admin_id", nullable = true)
+    private User adminId;
 
     public Long getUserId() {
         return userId;
@@ -97,11 +98,11 @@ public class User {
         this.isActive = isActive;
     }
 
-    public Long getAdminId() {
+    public User getAdminId() {
         return adminId;
     }
 
-    public void setAdminId(Long adminId) {
+    public void setAdminId(User adminId) {
         this.adminId = adminId;
     }
     

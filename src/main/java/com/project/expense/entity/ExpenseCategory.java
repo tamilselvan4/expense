@@ -16,7 +16,7 @@ public class ExpenseCategory {
     @Column(name = "category_id")
     private Long categoryId;
 
-    @Column(name = "category_name", unique = true, nullable = false)
+    @Column(name = "category_name")
     private String categoryName;
 
     public Long getCategoryId() {
