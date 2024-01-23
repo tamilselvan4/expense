@@ -1,5 +1,6 @@
 package com.project.expense.entity;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 
 import jakarta.persistence.Column;
@@ -12,20 +13,23 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="user_budget")
-public class UserBudget {
+@Table(name="budget")
+public class Budget {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "budget_id")
-    private long budgetId;
+    private Long budgetId;
 
     @ManyToOne
-    @JoinColumn(name = "budget_user_id", nullable = false)
-    private User userId;
+    @JoinColumn(name = "budget_type_id")
+    private BudgetType typeId;
+
+    @Column(name = "budget_entity_id")
+    private long entityId;
 
     @ManyToOne
-    @JoinColumn(name = "budget_category_id", nullable = false)
+    @JoinColumn(name = "budget_category_id")
     private ExpenseCategory categoryId;
 
     @Column(name = "budget_start_date")
@@ -35,19 +39,16 @@ public class UserBudget {
     private Date endDate;
 
     @Column(name = "budget_amount", nullable = false)
-    private float amount;
+    private BigDecimal amount;
+
+    @Column(name = "used_budget_amount")
+    private BigDecimal usedAmount;
 
     public long getBudgetId() {
         return budgetId;
     }
     public void setBudgetId(long budgetId) {
         this.budgetId = budgetId;
-    }
-    public User getUserId() {
-        return userId;
-    }
-    public void setUserId(User userId) {
-        this.userId = userId;
     }
     public Date getStartDate() {
         return startDate;
@@ -61,10 +62,10 @@ public class UserBudget {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
-    public float getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
-    public void setAmount(float amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
     public ExpenseCategory getCategoryId() {
@@ -73,5 +74,25 @@ public class UserBudget {
     public void setCategoryId(ExpenseCategory categoryId) {
         this.categoryId = categoryId;
     }
-    
+    public BudgetType getTypeId() {
+        return typeId;
+    }
+    public void setTypeId(BudgetType typeId) {
+        this.typeId = typeId;
+    }
+    public void setBudgetId(Long budgetId) {
+        this.budgetId = budgetId;
+    }
+    public BigDecimal getUsedAmount() {
+        return usedAmount;
+    }
+    public void setUsedAmount(BigDecimal usedAmount) {
+        this.usedAmount = usedAmount;
+    }
+    public long getEntityId() {
+        return entityId;
+    }
+    public void setEntityId(long entityId) {
+        this.entityId = entityId;
+    }
 }
