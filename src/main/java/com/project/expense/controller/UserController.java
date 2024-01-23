@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.project.expense.dto.CreateUserDto;
 import com.project.expense.entity.Expense;
 import com.project.expense.entity.User;
+import com.project.expense.service.CategoryService;
 import com.project.expense.service.ExpenseService;
 import com.project.expense.service.UserService;
 
@@ -32,6 +33,9 @@ public class UserController {
 
     @Autowired
     private ExpenseService expenseService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @PostMapping("/newuser")
     public ResponseEntity<?> createUser(@RequestBody CreateUserDto createUser) {
@@ -79,14 +83,40 @@ public class UserController {
     }
     
     @GetMapping("/{userId}/expense")
-    public ResponseEntity<List<Expense>> getAllExpensesForUser(@PathVariable("userId") Long userId, @RequestParam(required = false) Long statusId) {
-        List<Expense> userExpenses = expenseService.getAllExpensesForUser(userId);
-        List<Expense> userExpensesByStatus = expenseService.getAllExpensesByStatus(statusId);
+    public ResponseEntity<List<Expense>> getAllExpensesForUser(
+        @PathVariable("userId") Long userId, 
+        @RequestParam(required = false) Long statusId,
+        @RequestParam(required = false) Long categoryId) {
 
-        List<Expense> commonExpenses = new ArrayList<>(userExpenses);
-        commonExpenses.retainAll(userExpensesByStatus);
+        List<Expense> userExpenses = expenseService.getAllExpensesForUser(userId);
+
+        if(categoryId != null && statusId != null) {
+
+            List<Expense> userExpensesByStatus = expenseService.getAllExpensesByStatus(statusId);
+            List<Expense> userExpensesByCategory = categoryService.getAllExpensesByCategory(categoryId);
+
+            List<Expense> commonExpenses = new ArrayList<>(userExpenses);
+            commonExpenses.retainAll(userExpensesByCategory);
+            commonExpenses.retainAll(userExpensesByStatus);
+
+            return new ResponseEntity<>(commonExpenses, HttpStatus.OK);
+        }
+
+        if(categoryId != null) {
+            List<Expense> userExpensesByCategory = categoryService.getAllExpensesByCategory(categoryId);
+            
+            List<Expense> commonExpenses = new ArrayList<>(userExpenses);
+            commonExpenses.retainAll(userExpensesByCategory);
+
+            return new ResponseEntity<>(commonExpenses, HttpStatus.OK);
+        }
 
         if (statusId != null) {
+            List<Expense> userExpensesByStatus = expenseService.getAllExpensesByStatus(statusId);
+
+            List<Expense> commonExpenses = new ArrayList<>(userExpenses);
+            commonExpenses.retainAll(userExpensesByStatus);
+
             return new ResponseEntity<>(commonExpenses, HttpStatus.OK);
         }
 

@@ -5,16 +5,12 @@ import com.project.expense.entity.Expense;
 import com.project.expense.service.CategoryService;
 import com.project.expense.service.ExpenseService;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.GetMapping;
 
 
 @RestController
@@ -34,20 +30,13 @@ public class ExpenseController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getExpenses(@RequestParam(required = false) Long expenseId, @RequestParam(required = false) Long categoryId) {
+    public ResponseEntity<List<Expense>> getExpenses( 
+        @RequestParam(required = false) Long categoryId) {
+
         List<Expense> expenses = expenseService.getAllExpenses();
 
-        if(expenseId != null) {
-            Expense expense = expenseService.getExpenseById(expenseId);
-            if (expense != null) {
-                return new ResponseEntity<>(Collections.singletonList(expense), HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        }
-
         if (categoryId != null) {
-            expenses = categoryService.getAllExpensesForCategory(categoryId);
+            expenses = categoryService.getAllExpensesByCategory(categoryId);
         } else {
             expenses = expenseService.getAllExpenses();
         }
@@ -58,6 +47,17 @@ public class ExpenseController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }   
+
+    @GetMapping("/{expenseId}")
+    public ResponseEntity<Expense> getExpenseById(@PathVariable("expenseId") Long expenseId) {
+        Expense expense = expenseService.getExpenseById(expenseId);
+
+        if (expense != null) {
+            return new ResponseEntity<>(expense, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
     
 }
 

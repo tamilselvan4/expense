@@ -37,7 +37,7 @@ public class CategoryService {
         }
     }
 
-    public List<Expense> getAllExpensesForCategory(Long categoryId) {
+    public List<Expense> getAllExpensesByCategory(Long categoryId) {
 
         Optional<ExpenseCategory> expenseByCategoryId = categoryRepository.findById(categoryId);
 
