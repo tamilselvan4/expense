@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/budget")
@@ -21,9 +23,28 @@ public class BudgetController {
     private BudgetService budgetService;
     
     @PostMapping("/add")
-    public ResponseEntity<Budget> postMethodName(@RequestBody CreateBudgetDto budget) {
+    public ResponseEntity<Budget> addBudget(@RequestBody CreateBudgetDto budget) {
         Budget newbudget = budgetService.createBudget(budget);
         return new ResponseEntity<>(newbudget, HttpStatus.OK);
+    }
+
+    @GetMapping()
+    public ResponseEntity<Budget> getBudget(
+        @RequestParam Long typeId,
+        @RequestParam Long entityId,
+        @RequestParam(required = false) Long categoryId) {
+            Budget budget;
+            if(typeId == 1){
+                budget = budgetService.getAllBudgetByCompanyId(entityId);
+            }
+            else if(typeId == 2) {
+                budget = budgetService.getAllBudgetByUserId(entityId);
+            }
+            else {
+                return null;
+            }
+
+        return new ResponseEntity<>(budget, HttpStatus.OK);
     }
     
 }

@@ -2,6 +2,7 @@ package com.project.expense.controller;
 
 import com.project.expense.dto.CreateExpensedto;
 import com.project.expense.entity.Expense;
+import com.project.expense.exception.ExpenseCreationException;
 import com.project.expense.service.CategoryService;
 import com.project.expense.service.ExpenseService;
 
@@ -24,9 +25,20 @@ public class ExpenseController {
     private CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<Expense> createExpense(@RequestBody CreateExpensedto createExpense) {
-        Expense createdExpense = expenseService.createExpense(createExpense);
-        return new ResponseEntity<>(createdExpense, HttpStatus.CREATED);
+    public ResponseEntity<?> createExpense(
+        @RequestBody CreateExpensedto createExpense,
+        @RequestParam(required = false) Long typeId,
+        @RequestParam(required = false) Long entityId ) {
+            try {
+            Expense createdExpense = expenseService.createExpense(createExpense,typeId,entityId);
+                if (createdExpense == null) {
+                    throw new ExpenseCreationException("Expense creation failed");
+                }
+                return new ResponseEntity<>(createdExpense, HttpStatus.CREATED);
+                
+            } catch (ExpenseCreationException e) {
+                return new ResponseEntity<>("Input parameters are not applicable: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+            }
     }
 
     @GetMapping

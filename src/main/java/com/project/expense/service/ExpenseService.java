@@ -30,7 +30,26 @@ public class ExpenseService {
     @Autowired
     private StatusRepository statusRepository;
 
-    public Expense createExpense(CreateExpensedto createExpense) {
+    @Autowired
+    private BudgetService budgetService;
+
+    public Expense createExpense(CreateExpensedto createExpense, Long typeId, Long entityId) {
+
+        if (typeId != null) {
+            if(typeId == 1) {
+                Boolean valid = budgetService.checkAvailableBalanceForCompany(createExpense.getAmount(), entityId);
+                if(!valid){
+                    return null;
+                }
+            }
+            else if(typeId == 2) {
+                Boolean valid = budgetService.checkAvailableBalanceForUser(createExpense.getAmount(), entityId, typeId);
+                if(!valid){
+                    return null;
+                }
+            }
+        }
+
         Expense expense = new Expense();
         expense.setUser(userRepository.findById(createExpense.getUserId()).orElseThrow());
         expense.setCategory(categoryRepository.findById(createExpense.getCategoryId()).orElseThrow());

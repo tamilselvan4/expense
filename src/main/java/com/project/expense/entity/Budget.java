@@ -23,7 +23,7 @@ public class Budget {
 
     @ManyToOne
     @JoinColumn(name = "budget_type_id")
-    private BudgetType typeId;
+    private BudgetType budgetType;
 
     @Column(name = "budget_entity_id")
     private long entityId;
@@ -75,10 +75,10 @@ public class Budget {
         this.categoryId = categoryId;
     }
     public BudgetType getTypeId() {
-        return typeId;
+        return budgetType;
     }
     public void setTypeId(BudgetType typeId) {
-        this.typeId = typeId;
+        this.budgetType = typeId;
     }
     public void setBudgetId(Long budgetId) {
         this.budgetId = budgetId;
