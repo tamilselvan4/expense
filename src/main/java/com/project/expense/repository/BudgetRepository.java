@@ -13,6 +13,8 @@ public interface BudgetRepository extends JpaRepository<Budget, Long>{
 
     List<Budget> findByEntityIdOrderByEntityId(Long entityId);
 
-    // List<Budget> findAllByType(BudgetType typeId);
+    List<Budget> findAllBudgetByTypeId(BudgetType typeId);
+
+    List<Budget> findAllByEntityIdAndTypeId(Long entityId, BudgetType typeId);
 
 }

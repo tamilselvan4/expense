@@ -36,18 +36,8 @@ public class ExpenseService {
     public Expense createExpense(CreateExpensedto createExpense, Long typeId, Long entityId) {
 
         if (typeId != null) {
-            if(typeId == 1) {
-                Boolean valid = budgetService.checkAvailableBalanceForCompany(createExpense.getAmount(), entityId);
-                if(!valid){
-                    return null;
-                }
-            }
-            else if(typeId == 2) {
-                Boolean valid = budgetService.checkAvailableBalanceForUser(createExpense.getAmount(), entityId, typeId);
-                if(!valid){
-                    return null;
-                }
-            }
+            Boolean valid = budgetService.checkAvailableBalance(createExpense.getAmount(), entityId, typeId);
+            if(!valid) return null;
         }
 
         Expense expense = new Expense();
@@ -58,6 +48,7 @@ public class ExpenseService {
         expense.setDescription(createExpense.getDescription());
         expense.setStatus(statusRepository.findById(createExpense.getStatusId()).orElseThrow());
 
+        budgetService.updateAvailableBalance(createExpense.getAmount(), entityId, typeId);
         return expenseRepository.save(expense);
     }
 

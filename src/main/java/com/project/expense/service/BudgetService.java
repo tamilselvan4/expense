@@ -12,7 +12,6 @@ import com.project.expense.dto.CreateBudgetDto;
 import com.project.expense.entity.Budget;
 import com.project.expense.entity.BudgetType;
 import com.project.expense.entity.Company;
-import com.project.expense.entity.Expense;
 import com.project.expense.entity.User;
 import com.project.expense.repository.BudgetRepository;
 import com.project.expense.repository.BudgetTypeRepository;
@@ -51,40 +50,44 @@ public class BudgetService {
         return budgetRepository.save(budget);
     }
 
-    public BigDecimal checkAvailableBalance(Long entityId) {
-        Budget budget = budgetRepository.findByEntityId(entityId);
-        return budget.getAmount();
-    }
+    // public BigDecimal checkAvailableBalance(Long entityId) {
+    //     return budgetRepository.findByEntityId(entityId).getAmount();
+    // }
 
-    public Boolean checkAvailableBalanceForCompany(BigDecimal amount, Long entityId) {
-        Optional<Company> company = companyRepository.findById(entityId);
+    // public Boolean checkAvailableBalanceForCompany(BigDecimal amount, Long entityId) {
+    //     Optional<Company> company = companyRepository.findById(entityId);
         
-        if(company.isPresent()) {
-            Budget budget = budgetRepository.findByEntityId(entityId);
-            if(budget.getUsedAmount() == null) {
-                budget.setUsedAmount(BigDecimal.valueOf(0));
-            }
-            BigDecimal remainingBalance = (budget.getAmount()).subtract(budget.getUsedAmount());
-            if(amount.compareTo(remainingBalance)<0){
-                budget.setUsedAmount(amount);
+    //     if(company.isPresent()) {
+    //         List<Budget> companyBudgetsByEntityId = budgetRepository.findByEntityIdOrderByEntityId(entityId);
+    //         List<Budget> companyBudgetsByTypeId = getAllBudgetByTypeId(entityId);
+
+    //         List<Budget> companyBudget = new ArrayList<>(companyBudgetsByEntityId);
+    //         companyBudget.retainAll(companyBudgetsByTypeId);
+
+    //         Budget lastBudget = companyBudget.get(companyBudget.size() - 1);
+    //         if(lastBudget.getUsedAmount() == null) {
+    //             lastBudget.setUsedAmount(BigDecimal.valueOf(0));
+    //         }
+    //         BigDecimal remainingBalance = (lastBudget.getAmount()).subtract(lastBudget.getUsedAmount());
+    //         if(amount.compareTo(remainingBalance)<0){
+    //             lastBudget.setUsedAmount(amount);
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
+
+    public Boolean checkAvailableBalance(BigDecimal expenseAmount, Long entityId, Long typeId) {
+        Optional<User> user = userRepository.findById(entityId);
+        Optional<Company> company = companyRepository.findById(entityId);
+        if(user.isPresent() || company.isPresent()) {
+            BudgetType type = budgetTypeRepository.findById(typeId).orElseThrow();
+            List<Budget> budgets = budgetRepository.findAllByEntityIdAndTypeId(entityId, type);
+
+            if(budgets.isEmpty()) {
                 return true;
             }
-        }
-        return false;
-    }
-
-    public Boolean checkAvailableBalanceForUser(BigDecimal expenseAmount, Long entityId, Long typeId) {
-        Optional<User> user = userRepository.findById(entityId);
-        
-        if(user.isPresent()) {
-            List<Budget> userBudgets = budgetRepository.findByEntityIdOrderByEntityId(entityId);
-            // List<Budget> userBudgets2 = budgetRepository.findByTypeIdOrderByTypeId(typeId);
-            // List<Budget> userBudgets2 = getAllBudgetByType(typeId);
-
-            Budget lastBudget = userBudgets.get(userBudgets.size()-1);
-            BudgetType b = lastBudget.getTypeId();
-            System.out.println(b.getBudgetTypeId().toString());
-            // Budget budget = budgetRepository.findByEntityId(entityId);
+            Budget lastBudget = budgets.get(budgets.size()-1);
 
             if(lastBudget.getUsedAmount() == null) {
                 lastBudget.setUsedAmount(BigDecimal.valueOf(0));
@@ -92,39 +95,56 @@ public class BudgetService {
             BigDecimal remainingBalance = (lastBudget.getAmount()).subtract(lastBudget.getUsedAmount());
 
             if(expenseAmount.compareTo(remainingBalance)<0){
-                lastBudget.setUsedAmount(lastBudget.getUsedAmount().add(expenseAmount));
                 return true;
             }
         }
         return false;
     }
 
-    // public List<Budget> getAllBudgetByType(Long typeId) {
+    // public List<Budget> getAllBudgetByTypeId(Long typeId) {
     //     Optional<BudgetType> type = budgetTypeRepository.findById(typeId);
 
     //     if(type.isPresent()){
-    //         return budgetRepository.findAllByType(type.get());
+    //         return budgetRepository.findAllBudgetByTypeId(type.get());
     //     }
 
     //     return null;
     // }
 
-    public Budget getAllBudgetByCompanyId(Long entityId) {
+    public Budget getAllBudgetByEntityAndType(Long entityId, Long typeId) {
         Optional<Company> company = companyRepository.findById(entityId);
-        if(company.isPresent()) {
-            return budgetRepository.findByEntityId(entityId);
-        }
-
-        return null;
-    }
-
-    public Budget getAllBudgetByUserId(Long entityId) {
         Optional<User> user = userRepository.findById(entityId);
-        if(user.isPresent()) {
-            return budgetRepository.findByEntityId(entityId);
+
+        if(company.isPresent() || user.isPresent()) {
+            BudgetType type = budgetTypeRepository.findById(typeId).orElseThrow();
+            List<Budget> budgets = budgetRepository.findAllByEntityIdAndTypeId(entityId, type);
+            return budgets.get(budgets.size() - 1);
         }
 
-        return null;
+        else {
+            return null;
+        }
     }
+
+    public void updateAvailableBalance(BigDecimal amount, Long entityId, Long typeId) {
+        BudgetType type = budgetTypeRepository.findById(typeId).orElseThrow();
+        List<Budget> budgets = budgetRepository.findAllByEntityIdAndTypeId(entityId, type);
+
+        if(! budgets.isEmpty()) {
+            Budget lastBudget = budgets.get(budgets.size()-1);
+            lastBudget.setUsedAmount(lastBudget.getUsedAmount().add(amount));
+        }
+
+        
+    }
+
+    // public Budget getAllBudgetByUserId(Long entityId) {
+    //     Optional<User> user = userRepository.findById(entityId);
+    //     if(user.isPresent()) {
+    //         return budgetRepository.findByEntityId(entityId);
+    //     }
+
+    //     return null;
+    // }
 
 }
