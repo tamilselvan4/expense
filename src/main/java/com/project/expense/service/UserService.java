@@ -1,6 +1,12 @@
 package com.project.expense.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.project.expense.dto.CreateUserDto;
@@ -10,7 +16,7 @@ import com.project.expense.repository.RoleRepository;
 import com.project.expense.repository.UserRepository;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService{
 
     @Autowired
     private UserRepository userRepository;
@@ -21,11 +27,14 @@ public class UserService {
     @Autowired
     private CompanyRepository companyRepository;
 
+    @Autowired
+	private PasswordEncoder encoder;
+
     public User createUser(CreateUserDto createUser) {
         User u = new User();
         u.setUserName(createUser.getUserName());
         u.setEmail(createUser.getEmail());
-        u.setPassword(createUser.getPassword());
+        u.setPassword(encoder.encode(createUser.getPassword()) );
         u.setCompany(companyRepository.findById(createUser.getCompanyId()).orElseThrow());
         u.setUserRole(roleRepository.findById(createUser.getUserRole()).orElseThrow());
         u.setIsActive(createUser.getIsActive());
@@ -51,7 +60,7 @@ public class UserService {
             existingUser.setCompany(companyRepository.findById(updatedUser.getCompanyId()).orElseThrow());
             existingUser.setUserRole(roleRepository.findById(updatedUser.getUserRole()).orElseThrow());
 
-            return userRepository.save(existingUser);
+            return userRepository.saveAndFlush(existingUser);
         }
         else {
             return null;
@@ -62,17 +71,30 @@ public class UserService {
         return userRepository.existsById(userId);
     }
 
-    public boolean login(String email, String password) {
-        User user = userRepository.findByEmail(email);
-        if(user !=null && verifyPassword(password, user.getPassword())) {
-            return true;
-        }
-        return false;
-    }
+    // public boolean login(String email, String password) {
+    //     User user = userRepository.findByEmail(email);
+    //     if(user !=null && verifyPassword(password, user.getPassword())) {
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
     private boolean verifyPassword(String inputPassword, String password) {
         return inputPassword.equals(password);
     }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'loadUserByUsername'");
+    }
+
+    // @Override
+    // public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    //     User user = userRepository.findByEmail(username);
+    //     // return user.map(UserDetails::new).orElseThrow();
+    //     return null;
+    // }
 
 }
 

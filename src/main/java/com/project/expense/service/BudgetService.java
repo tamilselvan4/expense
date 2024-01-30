@@ -80,7 +80,7 @@ public class BudgetService {
     public Boolean checkAvailableBalance(BigDecimal expenseAmount, Long entityId, Long typeId) {
         Optional<User> user = userRepository.findById(entityId);
         Optional<Company> company = companyRepository.findById(entityId);
-        if(user.isPresent() || company.isPresent()) {
+        if((typeId == 2 && user.isPresent()) || (typeId == 1 && company.isPresent())) {
             BudgetType type = budgetTypeRepository.findById(typeId).orElseThrow();
             List<Budget> budgets = budgetRepository.findAllByEntityIdAndTypeId(entityId, type);
 
@@ -111,7 +111,7 @@ public class BudgetService {
     //     return null;
     // }
 
-    public Budget getAllBudgetByEntityAndType(Long entityId, Long typeId) {
+    public Budget getBudgetByEntityAndType(Long entityId, Long typeId) {
         Optional<Company> company = companyRepository.findById(entityId);
         Optional<User> user = userRepository.findById(entityId);
 

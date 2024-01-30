@@ -28,7 +28,7 @@ public class CategoryController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<String> addCategory(@RequestParam String categoryName) {
         ExpenseCategory newCategory = new ExpenseCategory();
         newCategory.setCategoryName(categoryName);

@@ -12,13 +12,17 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestController; 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 
 import com.project.expense.dto.CreateUserDto;
 import com.project.expense.entity.Expense;
 import com.project.expense.entity.User;
 import com.project.expense.service.CategoryService;
 import com.project.expense.service.ExpenseService;
+import com.project.expense.service.JwtService;
 import com.project.expense.service.UserService;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,7 +41,13 @@ public class UserController {
     @Autowired
     private CategoryService categoryService;
 
-    @PostMapping("/newuser")
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtService jwtService;
+
+    @PostMapping("/new")
     public ResponseEntity<?> createUser(@RequestBody CreateUserDto createUser) {
 
         if(userService.isUserExists(createUser.getEmail())) {
@@ -72,10 +82,11 @@ public class UserController {
     }
     
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam("email") String email, @RequestParam("password") String password) {
-        boolean valid = userService.login(email, password);
-        if(valid) {
-            return new ResponseEntity<>("Login successful", HttpStatus.OK);
+    public ResponseEntity<String> login(@RequestParam("email") String username, @RequestParam("password") String password) {
+        // boolean valid = userService.login(email, password);
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username,password));
+        if(authentication.isAuthenticated()) {
+            return new ResponseEntity<>(jwtService.generateToken(username), HttpStatus.OK);
         }
         else {
             return new ResponseEntity<>("Invalid credentials", HttpStatus.UNAUTHORIZED);

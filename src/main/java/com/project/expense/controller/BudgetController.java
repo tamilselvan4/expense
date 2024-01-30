@@ -33,17 +33,7 @@ public class BudgetController {
         @RequestParam Long typeId,
         @RequestParam Long entityId,
         @RequestParam(required = false) Long categoryId) {
-            Budget budget = budgetService.getAllBudgetByEntityAndType(entityId, typeId);
-
-            // if(typeId == 1){
-            //     budget = budgetService.getAllBudgetByCompanyId(entityId);
-            // }
-            // else if(typeId == 2) {
-            //     budget = budgetService.getAllBudgetByUserId(entityId);
-            // }
-            // else {
-            //     return null;
-            // }
+            Budget budget = budgetService.getBudgetByEntityAndType(entityId, typeId);
 
         return new ResponseEntity<>(budget, HttpStatus.OK);
     }

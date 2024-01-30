@@ -48,4 +48,8 @@ public class CategoryService {
         return null;
     }
 
+    public boolean isCategoryExists(String categoryName) {
+        return categoryRepository.existsByCategoryName(categoryName);
+    }
+
 }
