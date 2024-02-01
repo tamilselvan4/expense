@@ -19,7 +19,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.project.expense.filter.JwtAuthFilter;
-import com.project.expense.service.UserInfoService;
+import com.project.expense.service.UserService;
 
 @Configuration
 @EnableWebSecurity
@@ -31,7 +31,7 @@ public class SecurityConfig {
 
     @Bean
     UserDetailsService userDetailsService() {
-        return new UserInfoService();
+        return new UserService();
     }
 
     @Bean

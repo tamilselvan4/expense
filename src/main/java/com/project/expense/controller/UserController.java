@@ -83,7 +83,7 @@ public class UserController {
     
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestParam("email") String username, @RequestParam("password") String password) {
-        // boolean valid = userService.login(email, password);
+        
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username,password));
         if(authentication.isAuthenticated()) {
             return new ResponseEntity<>(jwtService.generateToken(username), HttpStatus.OK);

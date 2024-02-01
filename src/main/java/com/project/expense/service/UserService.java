@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.project.expense.dto.CreateUserDto;
 import com.project.expense.entity.User;
+import com.project.expense.entity.UserInfoDetails;
 import com.project.expense.repository.CompanyRepository;
 import com.project.expense.repository.RoleRepository;
 import com.project.expense.repository.UserRepository;
@@ -71,30 +72,13 @@ public class UserService implements UserDetailsService{
         return userRepository.existsById(userId);
     }
 
-    // public boolean login(String email, String password) {
-    //     User user = userRepository.findByEmail(email);
-    //     if(user !=null && verifyPassword(password, user.getPassword())) {
-    //         return true;
-    //     }
-    //     return false;
-    // }
-
-    private boolean verifyPassword(String inputPassword, String password) {
-        return inputPassword.equals(password);
-    }
-
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'loadUserByUsername'");
-    }
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<User> userDetail = userRepository.findByEmail(email); 
 
-    // @Override
-    // public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    //     User user = userRepository.findByEmail(username);
-    //     // return user.map(UserDetails::new).orElseThrow();
-    //     return null;
-    // }
+		return userDetail.map(UserInfoDetails::new) 
+				.orElseThrow(() -> new UsernameNotFoundException("User not found "));
+    }
 
 }
 
